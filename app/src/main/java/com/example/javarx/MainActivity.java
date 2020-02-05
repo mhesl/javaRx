@@ -12,6 +12,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
+    private Disposable disposable;
     private static final String TAG = MainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSubscribe(Disposable d) {
                 Log.d(TAG, "onSubscribe");
+                disposable = d;
             }
 
             @Override
@@ -55,5 +57,12 @@ public class MainActivity extends AppCompatActivity {
     }
     private Observable<String> getAnimalsObservable() {
         return Observable.just("Ant", "Bee", "Cat", "Dog", "Fox");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        disposable.dispose();
+
     }
 }
